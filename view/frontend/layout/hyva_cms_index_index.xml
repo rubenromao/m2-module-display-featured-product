@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- Include Tailwind CSS file if needed -->
+        <css src="RubenRomao_DisplayFeaturedProduct::css/tailwind.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProduct"
+                   name="custom.homepage.block.display.featured.product"
+                   template="RubenRomao_DisplayFeaturedProduct::featured_product.phtml">
+                <arguments>
+                    <argument name="featured_product_vm" xsi:type="object">
+                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

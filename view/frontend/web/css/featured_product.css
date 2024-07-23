@@ -1,0 +1,24 @@
+.featured-products .product {
+    display: flex;
+    margin-bottom: 970px;
+}
+
+.product-image {
+    flex: 1;
+    text-align: left;
+}
+
+.product-description {
+    flex: 2;
+    padding-left: 70px;
+}
+
+@media (max-width: 767px) {
+    .featured-products .product {
+        flex-direction: column;
+    }
+
+    .product-description {
+        padding-left: 0;
+    }
+}

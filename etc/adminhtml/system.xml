@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="featured_products" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <label>Featured Products</label>
+            <tab>catalog</tab>
+            <resource>RubenRomao_DisplayFeaturedProduct::show_featured_product_homepage</resource>
+            <group id="homepage" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display Featured Product on the Homepage</label>
+                <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Display Featured Product?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>featured_products/homepage/enabled</config_path>
+                </field>
+                <field id="featured_product_sku" type="select" translate="label" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Select the Featured Product to Display</label>
+                    <comment>Featured Product (SKU - Name) Ordered alphabetically by Name</comment>
+                    <source_model>RubenRomao\DisplayFeaturedProduct\Model\Config\Source\FeaturedSkusToOptionArray</source_model>
+                    <config_path>featured_products/homepage/featured_product_sku</config_path>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

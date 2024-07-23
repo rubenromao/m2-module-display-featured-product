@@ -1,0 +1,22 @@
+{
+  "name": "rubenromao/m2-module-display-featured-product",
+  "version": "1.0.0",
+  "description": "Allows the admin to display a featured product by SKU on the homepage.",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+      "magento/module-catalog": "*",
+      "magento/module-config": "*",
+      "magento/module-backend": "*",
+      "magento/module-eav": "*",
+      "magento/module-store": "*"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "RubenRomao\\DisplayFeaturedProduct\\": ""
+    }
+  }
+}
