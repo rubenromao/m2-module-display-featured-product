@@ -1,3 +1,32 @@
+/* Container holding both columns */
+.content-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Left column */
+.left-column {
+    flex: 3; /* Takes up 3/4 of the container */
+    padding-right: 20px; /* Adjust as needed */
+}
+
+/* Right column */
+.right-column {
+    flex: 1; /* Takes up 1/4 of the container */
+    padding-left: 20px; /* Adjust as needed */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .left-column,
+    .right-column {
+        flex: 1 0 100%; /* Each column takes full width on smaller screens */
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+/* product.css */
 .featured-products .product {
     display: flex;
     margin-bottom: 970px;

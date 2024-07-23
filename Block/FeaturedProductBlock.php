@@ -5,7 +5,7 @@ namespace RubenRomao\DisplayFeaturedProduct\Block;
 
 use Magento\Framework\View\Element\Template;
 
-class FeaturedProduct extends Template
+class FeaturedProductBlock extends Template
 {
     /**
      * XML paths to configuration settings.

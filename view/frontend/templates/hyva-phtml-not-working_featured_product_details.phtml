@@ -1,0 +1,73 @@
+<?php
+/**
+ * Hyvä Theme Compatible
+ */
+declare(strict_types=1);
+
+//use Magento\Catalog\Block\Product\View;
+//
+///** @var View $block */
+
+use Magento\Framework\Escaper;
+use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
+use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
+
+/** @var FeaturedProductBlock $block */
+/** @var Escaper $escaper */
+/** @var FeaturedProductData $productData */
+$productData = $block->getData('featured_product_vm');
+$data = $productData->getFeaturedProduct();
+$imageUrl = '';//$productData->getProductImageUrl($data->getImage());
+//echo'<pre>';echo $data->getItems();var_dump($data);echo'</pre>';exit();
+?>
+<?php foreach ($data->getItems() as $product): ?>
+    <section class='text-gray-700 body-font'>
+        <div class='flex lg:pb-6 lg:flex-row flex-col items-center'>
+            <div class='block lg:flex flex-nowrap order-first w-full container'>
+                <div class='order-1 w-full lg:h-auto'>
+                    <h1 class='text-primary-darker text-xl2 lg:text-xl4 font-bold uppercase leading-[31px]'>
+                        <?= $escaper->escapeHtml($product->getName()) ?>
+                    </h1>
+                    <div class="order-2 mt-2 mb-4 font-bold">
+                        <p class="hidden md:block">Code: <?= $escaper->escapeHtml($product->getSku()); ?></p>
+                    </div>
+                    <?= $block->getChildHtml('product.media') ?>
+                    <div class="block lg:hidden mt-4 beforeAtb md:min-h-0">
+                        <div id="mobileInfo">
+
+                        </div>
+                    </div>
+                    <?= $block->getChildHtml('product.info.description'); ?>
+                </div>
+                <div class="order-2 w-full mb-6 lg:w-full lg:pl-5 lg:pl-0 lg:ml-10 lg:w-full lg:max-w-[536px] lg:mb-0"
+                     id="productInfo">
+                    <?= $block->getChildHtml('product.info') ?>
+                </div>
+                <button type='button' onclick="location.href='<?= $escaper->escapeUrl($productData->getProductUrl(
+                    $product)) ?>'"
+                        class='product-item-inner'>
+                    <?= $escaper->escapeHtml(__('View Product')) ?>
+                </button>
+                <div id="desktopInfo"></div>
+            </div>
+        </div>
+    </section>
+<?php endforeach; ?>
+
+<script>
+    var mobilePlace = document.querySelector('#mobileInfo');
+    var info = document.querySelector('#productInfo');
+    var desktopPlace = document.querySelector("#desktopInfo");
+
+    function fixedMenu(e) {
+
+        if (window.innerWidth < 1024) {
+            mobilePlace.after(info);
+        } else {
+            desktopPlace.after(info);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fixedMenu);
+    window.addEventListener('resize', fixedMenu);
+</script>
