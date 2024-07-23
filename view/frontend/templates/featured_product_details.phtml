@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Framework\Escaper;
 use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
 use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
@@ -11,28 +10,16 @@ use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 /** @var FeaturedProductData $productData */
 $productData = $block->getData('featured_product_vm');
 $data = $productData->getFeaturedProduct();
-/** @var ListProduct $block */
 ?>
 <?php foreach ($data->getItems() as $product): ?>
-
-    <div class='right-column'>
-        <div class="product details product-item-details">
-
-            <h2><?= $escaper->escapeHtml($product->getName()) ?></h2>
-            <?= $escaper->escapeHtml($product->getData('description')) ?>
-            <p><?= $escaper->escapeHtml($product->getData('formated_price')) ?></p>
-
-<!--            --><?php //$productNameStripped = $block->stripTags($product->getName(), null, true); ?>
-<!--            <strong class="product name product-item-name">-->
-<!--                <a class="product-item-link"-->
-<!--                   href="--><?php //= $escaper->escapeUrl($productData->productUrl($product->getSku())) ?><!--">-->
-<!--                </a>-->
-<!--            </strong>-->
-
-<!--            --><?php //= /* @noEscape */ $block->getProductPrice($product) ?>
-
-<!--            --><?php //= $block->getProductDetailsHtml($product) ?>
-
-        </div>
+    <div class="product details product-item-details">
+        <h2><?= $escaper->escapeHtml($product->getName()) ?></h2>
+        <?= $escaper->escapeHtml($product->getData('description')) ?>
+        <p><?= $escaper->escapeHtml($product->getData('formated_price')) ?></p>
+        <!-- Button to send the customer to the product page -->
+        <!-- Link styled as a button to send the customer to the product page -->
+        <a href="<?= $escaper->escapeUrl($productData->getProductDetailPageUrl($product->getSku())) ?>" class='button'>
+            <?= $escaper->escapeHtml(__('Go To The Product Page')) ?>
+        </a>
     </div>
 <?php endforeach; ?>

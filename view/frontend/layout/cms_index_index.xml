@@ -6,10 +6,11 @@
     </head>
     <update handle="2columns-left"/>
     <body>
-
-        <referenceContainer name="page.wrapper">
+        <referenceContainer name="columns">
+            <referenceBlock name="sidebar.main" remove="true"/>
+            <referenceBlock name="sidebar.additional" remove="true"/>
             <!-- Left Column -->
-            <container name="left.column" htmlTag="div" htmlClass="left-column" before="-">
+            <container name="left.column" htmlTag="div" htmlClass="left-column">
                 <!-- Add blocks or content here for the left column -->
                 <block class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock"
                        name="homepage.display.featured.product.image"

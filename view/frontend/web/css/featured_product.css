@@ -1,53 +1,44 @@
-/* Container holding both columns */
-.content-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-/* Left column */
 .left-column {
-    flex: 3; /* Takes up 3/4 of the container */
-    padding-right: 20px; /* Adjust as needed */
+    float: left;
+    width: 40%; /* Takes up 3/4 of the container */
+    padding-right: 2px; /* Space between the columns */
+    vert-align: top;
 }
 
-/* Right column */
 .right-column {
-    flex: 1; /* Takes up 1/4 of the container */
-    padding-left: 20px; /* Adjust as needed */
+    float: right;
+    width: 50%; /* Takes up 1/4 of the container */
+    padding-left: 2px; /* Space between the columns */
+    padding-top: 25px;
+    padding-bottom: 25px;
+    vertical-align: top;
 }
 
-/* Responsive adjustments */
+/* Clearfix for the parent container */
+.columns:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 @media (max-width: 768px) {
-    .left-column,
-    .right-column {
-        flex: 1 0 100%; /* Each column takes full width on smaller screens */
+    .left-column, .right-column {
+        float: none;
+        width: 100%; /* Each column takes full width on smaller screens */
         padding-right: 0;
         padding-left: 0;
     }
 }
 
-/* product.css */
-.featured-products .product {
-    display: flex;
-    margin-bottom: 970px;
-}
-
-.product-image {
-    flex: 1;
-    text-align: left;
-}
-
-.product-description {
-    flex: 2;
-    padding-left: 70px;
-}
-
-@media (max-width: 767px) {
-    .featured-products .product {
-        flex-direction: column;
-    }
-
-    .product-description {
-        padding-left: 0;
-    }
+/* Add this CSS to your stylesheet to style the link as a button */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #8be9fd;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;;
 }
