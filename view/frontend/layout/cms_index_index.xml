@@ -1,30 +1,13 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
-      layout="2columns-left">
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="RubenRomao_DisplayFeaturedProduct::css/featured_product.css"/>
     </head>
+    <update handle="2columns-left"/>
     <body>
 
         <referenceContainer name="page.wrapper">
-            <container name="header.container" as="header_container" label="Page Header Container"  htmlTag="header" htmlClass="page-header" before="main.content"/>
-            <container name="page.top" as="page_top" label="After Page Header" after="header.container"/>
-
-            <referenceContainer name="content">
-                <block class="Magento\Framework\View\Element\Template" name="test" template="RubenRomao_DisplayFeaturedProduct::featured_product_image.phtml">
-                <arguments>
-                    <argument name="featured_product_vm" xsi:type="object">
-                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData
-                    </argument>
-                </arguments>
-            </block>
-            </referenceContainer>
-
-            <container name="footer-container" as="footer" before="before.body.end" label="Page Footer Container" htmlTag="footer" htmlClass="page-footer" />
-        </referenceContainer>
-
-        <referenceContainer name="content">
             <!-- Left Column -->
             <container name="left.column" htmlTag="div" htmlClass="left-column" before="-">
                 <!-- Add blocks or content here for the left column -->

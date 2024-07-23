@@ -11,8 +11,6 @@ use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 /** @var FeaturedProductData $productData */
 $productData = $block->getData('featured_product_vm');
 $data = $productData->getFeaturedProduct();
-//$imageUrl = $productData->getProductImageUrl($data->getSku());
-//echo'<pre>';echo $data->getItems();var_dump($data);echo'</pre>';exit();
 /** @var ListProduct $block */
 ?>
 <?php foreach ($data->getItems() as $product): ?>
@@ -24,16 +22,16 @@ $data = $productData->getFeaturedProduct();
             <?= $escaper->escapeHtml($product->getData('description')) ?>
             <p><?= $escaper->escapeHtml($product->getData('formated_price')) ?></p>
 
-            <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>
-            <strong class="product name product-item-name">
-                <a class="product-item-link"
-                   href="<?= $escaper->escapeUrl($productData->productUrl($product->getSku())) ?>">
-                </a>
-            </strong>
+<!--            --><?php //$productNameStripped = $block->stripTags($product->getName(), null, true); ?>
+<!--            <strong class="product name product-item-name">-->
+<!--                <a class="product-item-link"-->
+<!--                   href="--><?php //= $escaper->escapeUrl($productData->productUrl($product->getSku())) ?><!--">-->
+<!--                </a>-->
+<!--            </strong>-->
 
-            <?= /* @noEscape */ $block->getProductPrice($product) ?>
+<!--            --><?php //= /* @noEscape */ $block->getProductPrice($product) ?>
 
-            <?= $block->getProductDetailsHtml($product) ?>
+<!--            --><?php //= $block->getProductDetailsHtml($product) ?>
 
         </div>
     </div>
