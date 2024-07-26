@@ -39,15 +39,6 @@ After installing the RubenRomao_DisplayFeaturedProduct module, you can use it in
     - Use the provided template `featured_product_details.phtml` to display the featured product details.
     - For Hyvä theme compatibility, use `hyva-phtml-not-working_featured_product_details.phtml`.
 
-## Extensibility
-
-*You may provide guide here if your module can be extended or customized.*
-
-## Support
-
-If you encounter any problems while using this module, please [open an issue](link_to_your_project_issues_page) or
-contact us directly at `support@example.com`.
-
 ## License
 
 This project is licensed under the terms of the MIT license.
