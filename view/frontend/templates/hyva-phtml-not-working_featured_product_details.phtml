@@ -4,10 +4,6 @@
  */
 declare(strict_types=1);
 
-//use Magento\Catalog\Block\Product\View;
-//
-///** @var View $block */
-
 use Magento\Framework\Escaper;
 use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
 use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
@@ -17,8 +13,7 @@ use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 /** @var FeaturedProductData $productData */
 $productData = $block->getData('featured_product_vm');
 $data = $productData->getFeaturedProduct();
-$imageUrl = '';//$productData->getProductImageUrl($data->getImage());
-//echo'<pre>';echo $data->getItems();var_dump($data);echo'</pre>';exit();
+$imageUrl = $productData->getProductImageUrl($data->getImage());
 ?>
 <?php foreach ($data->getItems() as $product): ?>
     <section class='text-gray-700 body-font'>
@@ -44,7 +39,8 @@ $imageUrl = '';//$productData->getProductImageUrl($data->getImage());
                     <?= $block->getChildHtml('product.info') ?>
                 </div>
                 <button type='button' onclick="location.href='<?= $escaper->escapeUrl($productData->getProductUrl(
-                    $product)) ?>'"
+                    $product
+                )) ?>'"
                         class='product-item-inner'>
                     <?= $escaper->escapeHtml(__('View Product')) ?>
                 </button>

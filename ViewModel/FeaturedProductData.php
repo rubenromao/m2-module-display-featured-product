@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -26,6 +27,7 @@ class FeaturedProductData implements ArgumentInterface
      *
      * @param ProductRepositoryInterface $productRepository
      * @param SearchCriteriaBuilder $searchCriteria
+     * @param PriceCurrencyInterface $priceCurrency
      * @param Config $productMediaConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
@@ -34,6 +36,7 @@ class FeaturedProductData implements ArgumentInterface
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly SearchCriteriaBuilder $searchCriteria,
+        private readonly PriceCurrencyInterface $priceCurrency,
         private readonly Config $productMediaConfig,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager,
@@ -101,5 +104,16 @@ class FeaturedProductData implements ArgumentInterface
     {
         $product = $this->productRepository->get($productSku);
         return $product->getProductUrl();
+    }
+
+    /**
+     * Get the formatted price.
+     *
+     * @param string $price
+     * @return string
+     */
+    public function getFormattedPrice(string $price): string
+    {
+        return $this->priceCurrency->format($price, false, 2);
     }
 }

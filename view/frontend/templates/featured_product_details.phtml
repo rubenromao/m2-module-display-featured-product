@@ -14,12 +14,15 @@ $data = $productData->getFeaturedProduct();
 <?php foreach ($data->getItems() as $product): ?>
     <div class="product details product-item-details">
         <h2><?= $escaper->escapeHtml($product->getName()) ?></h2>
-        <?= $escaper->escapeHtml($product->getData('description')) ?>
-        <p><?= $escaper->escapeHtml($product->getData('formated_price')) ?></p>
-        <!-- Button to send the customer to the product page -->
-        <!-- Link styled as a button to send the customer to the product page -->
-        <a href="<?= $escaper->escapeUrl($productData->getProductDetailPageUrl($product->getSku())) ?>" class='button'>
-            <?= $escaper->escapeHtml(__('Go To The Product Page')) ?>
+        <?= $escaper->escapeHtmlAttr(strip_tags($product->getData('description'))) ?><br/><br>
+        <p>
+            <strong>
+                <label><?= $escaper->escapeHtml(__('Price:')) ?></label>
+            </strong>
+            <?= $escaper->escapeHtml($productData->getFormattedPrice($product->getData('price'))) ?>
+        </p>
+        <a href='<?= $escaper->escapeUrl($productData->getProductDetailPageUrl($product->getSku())) ?>'
+           class='action primary'>Go to the Product Page
         </a>
     </div>
 <?php endforeach; ?>

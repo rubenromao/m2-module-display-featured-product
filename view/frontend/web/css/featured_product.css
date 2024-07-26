@@ -1,8 +1,10 @@
 .left-column {
     float: left;
-    width: 40%; /* Takes up 3/4 of the container */
+    width: 45%; /* Takes up 3/4 of the container */
     padding-right: 2px; /* Space between the columns */
-    vert-align: top;
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
 }
 
 .right-column {
@@ -11,10 +13,10 @@
     padding-left: 2px; /* Space between the columns */
     padding-top: 25px;
     padding-bottom: 25px;
-    vertical-align: top;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
 }
 
-/* Clearfix for the parent container */
 .columns:after {
     content: "";
     display: table;
@@ -30,15 +32,20 @@
     }
 }
 
-/* Add this CSS to your stylesheet to style the link as a button */
 .button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
     color: #fff;
-    background-color: #8be9fd;
+    background-color: #007bdb; /* Default Magento button color */
     text-align: center;
     text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;;
+    border-radius: 3px; /* Default Magento button border radius */
+    transition: background-color 0.3s;
+    border: 1px solid #007bdb; /* Default Magento button border */
+}
+
+.button:hover {
+    background-color: #0056a3; /* Default Magento button hover color */
+    border-color: #0056a3; /* Default Magento button hover border color */
 }
