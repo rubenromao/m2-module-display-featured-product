@@ -1,5 +1,3 @@
-# RubenRomao_DisplayFeaturedProduct Module
-
 ## Overview
 
 The RubenRomao_DisplayFeaturedProduct module is designed to display a featured product on the frontend of a Magento 2 store.
