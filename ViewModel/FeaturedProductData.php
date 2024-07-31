@@ -77,7 +77,7 @@ class FeaturedProductData implements ArgumentInterface
             // Search the featured product using the service contract ProductRepositoryInterface::getList().
             $searchProduct = $this->searchCriteria
                 ->addFilter('sku', $featuredSku)
-                ->addFilter('s_featured', 1)
+                ->addFilter('is_featured', 1)
                 ->create();
             return $this->productRepository->getList($searchProduct);
 
