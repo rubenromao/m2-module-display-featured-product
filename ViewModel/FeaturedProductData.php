@@ -3,25 +3,31 @@ declare(strict_types=1);
 
 namespace RubenRomao\DisplayFeaturedProduct\ViewModel;
 
+use Exception;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
 
 /**
  * View Model to get the featured product data to be used in the block.
  */
 class FeaturedProductData implements ArgumentInterface
 {
+    public const string XML_PATH_FEATURED_PRODUCT_ENABLED = 'featured_products/homepage/enabled';
+    public const string XML_PATH_FEATURED_PRODUCT_SKU = 'featured_products/homepage/featured_product_sku';
+    public const string PRODUCT_PLACEHOLDER_IMAGE = 'placeholder/default/placeholder.jpg';
+
     /**
      * FeaturedProductData constructor.
      *
@@ -31,6 +37,7 @@ class FeaturedProductData implements ArgumentInterface
      * @param Config $productMediaConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
+     * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -40,6 +47,7 @@ class FeaturedProductData implements ArgumentInterface
         private readonly Config $productMediaConfig,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager,
+        private readonly ManagerInterface $messageManager,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -48,72 +56,89 @@ class FeaturedProductData implements ArgumentInterface
      * Here is where we do the sku check and respective actions.
      *
      * @return ProductSearchResultsInterface|null
+     * @throws Exception
      */
     public function getFeaturedProduct(): ?ProductSearchResultsInterface
     {
-        /*
-         * Get the featured product status and SKU from the configuration.
-         */
-        $featuredEnabled = $this->scopeConfig->getValue(
-            FeaturedProductBlock::XML_PATH_FEATURED_PRODUCT_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-        );
-        $featuredSku = $this->scopeConfig->getValue(
-            FeaturedProductBlock::XML_PATH_FEATURED_PRODUCT_SKU,
-            ScopeInterface::SCOPE_STORE,
-        );
+        // Get the configuration values.
+        $featuredEnabled = $this->getConfigValue(self::XML_PATH_FEATURED_PRODUCT_ENABLED);
+        $featuredSku = $this->getConfigValue(self::XML_PATH_FEATURED_PRODUCT_SKU);
 
-        // Get the featured product if it is enabled and the SKU is set.
-        if ($featuredEnabled && $featuredSku) {
+        /**
+         * Stop the execution if the featured product is not enabled,
+         *   or the SKU is not set and log the error and return null.
+         */
+        if (!$featuredEnabled || !$featuredSku) {
+            $this->logger->error('Featured product is not enabled or SKU is not set.');
+            return null;
+        }
+
+        try {
+            // Search the featured product using the service contract ProductRepositoryInterface::getList().
             $searchProduct = $this->searchCriteria
-                ->addFilter('sku', $featuredSku, 'eq')
-                ->addFilter('is_featured', 1, 'eq')
+                ->addFilter('sku', $featuredSku)
+                ->addFilter('s_featured', 1)
                 ->create();
             return $this->productRepository->getList($searchProduct);
-        } else {
-            $this->logger->error('Featured product is not enabled or SKU is not set.');
+
+        } catch (Exception $e) {
+            /**
+             * If the search fails, stop the process by logging the error and throwing an exception.
+             * The exception will be caught in the block, and the featured product block will not be displayed.
+             */
+            $this->logger->critical('Error fetching the featured product: ' . $e->getMessage());
+            //throw new NoSuchEntityException(__('Error fetching the featured product: %1', $e->getMessage()), $e);
             return null;
         }
     }
 
     /**
-     * Get the featured product URL image by SKU.
+     * Get the product image URL.
      *
-     * @param string $productSku
+     * @param ProductInterface $product
      * @return string
      * @throws NoSuchEntityException
      */
-    public function getProductImageUrl(string $productSku): string
+    public function getProductImageUrl(ProductInterface $product): string
     {
-        $product = $this->productRepository->get($productSku);
-        $store = $this->storeManager->getStore();
+        try {
+            $store = $this->storeManager->getStore();
+            $imageUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) .
+                $this->productMediaConfig->getBaseMediaPath() .
+                $product->getImage();
 
-        return $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) .
-                  $this->productMediaConfig->getBaseMediaPath() .
-                  $product->getImage();
-    }
+            if (!$imageUrl) {
+                $imageUrl = $this->productMediaConfig->getBaseMediaUrl() . self::PRODUCT_PLACEHOLDER_IMAGE;
+            }
 
-    /**
-     * Get the product detail page URL by SKU.
-     *
-     * @param string $productSku
-     * @return string
-     * @throws NoSuchEntityException
-     */
-    public function getProductDetailPageUrl(string $productSku): string
-    {
-        $product = $this->productRepository->get($productSku);
-        return $product->getProductUrl();
+            return $imageUrl;
+
+        } catch (Exception $e) {
+            /* Log the error and return the product placeholder image URL. */
+            $this->logger->error('Error fetching the product image: ' . $e->getMessage());
+            return $this->productMediaConfig->getBaseMediaUrl() . self::PRODUCT_PLACEHOLDER_IMAGE;
+        }
     }
 
     /**
      * Get the formatted price.
      *
-     * @param string $price
+     * @param float|string $price
      * @return string
      */
-    public function getFormattedPrice(string $price): string
+    public function getFormattedPrice(float|string $price): string
     {
         return $this->priceCurrency->format($price, false, 2);
+    }
+
+    /**
+     * Get configuration value by path.
+     *
+     * @param string $path
+     * @return mixed
+     */
+    private function getConfigValue(string $path): mixed
+    {
+        return $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
     }
 }

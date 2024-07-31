@@ -11,12 +11,14 @@ use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 $productData = $block->getData('featured_product_vm');
 $data = $productData->getFeaturedProduct();
 ?>
-<?php foreach ($data->getItems() as $product): ?>
-    <img class="product base-image"
-         src="<?= $escaper->escapeUrl($productData->getProductImageUrl($product->getSku())) ?>"
-         loading="lazy"
-         alt="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
-         width="50%"
-         height="50%"
-    />
-<?php endforeach; ?>
+<?php if ($data && $data->getItems()): ?>
+    <?php foreach ($data->getItems() as $product): ?>
+        <img class="product base-image"
+             src="<?= $escaper->escapeUrl($productData->getProductImageUrl($product)) ?>"
+             loading="lazy"
+             alt="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
+             width="50%"
+             height="50%"
+        />
+    <?php endforeach; ?>
+<?php endif; ?>
