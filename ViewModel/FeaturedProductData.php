@@ -10,9 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -29,25 +27,26 @@ class FeaturedProductData implements ArgumentInterface
     public const string PRODUCT_PLACEHOLDER_IMAGE = 'placeholder/default/placeholder.jpg';
 
     /**
+     * @var string|null
+     */
+    private ?string $errorMessage;
+
+    /**
      * FeaturedProductData constructor.
      *
      * @param ProductRepositoryInterface $productRepository
      * @param SearchCriteriaBuilder $searchCriteria
-     * @param PriceCurrencyInterface $priceCurrency
      * @param Config $productMediaConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly SearchCriteriaBuilder $searchCriteria,
-        private readonly PriceCurrencyInterface $priceCurrency,
         private readonly Config $productMediaConfig,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager,
-        private readonly ManagerInterface $messageManager,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -55,10 +54,9 @@ class FeaturedProductData implements ArgumentInterface
     /**
      * Here is where we do the sku check and respective actions.
      *
-     * @return ProductSearchResultsInterface|null
-     * @throws Exception
+     * @return ProductSearchResultsInterface|Exception|null
      */
-    public function getFeaturedProduct(): ?ProductSearchResultsInterface
+    public function getFeaturedProduct(): ProductSearchResultsInterface|ManagerInterface|null
     {
         // Get the configuration values.
         $featuredEnabled = $this->getConfigValue(self::XML_PATH_FEATURED_PRODUCT_ENABLED);
@@ -82,12 +80,9 @@ class FeaturedProductData implements ArgumentInterface
             return $this->productRepository->getList($searchProduct);
 
         } catch (Exception $e) {
-            /**
-             * If the search fails, stop the process by logging the error and throwing an exception.
-             * The exception will be caught in the block, and the featured product block will not be displayed.
-             */
+            /* If the search fails, log the error and display an error message. */
             $this->logger->critical('Error fetching the featured product: ' . $e->getMessage());
-            //throw new NoSuchEntityException(__('Error fetching the featured product: %1', $e->getMessage()), $e);
+            $this->setErrorMessage('We are currently experiencing issues. Please try again later.');
             return null;
         }
     }
@@ -97,7 +92,6 @@ class FeaturedProductData implements ArgumentInterface
      *
      * @param ProductInterface $product
      * @return string
-     * @throws NoSuchEntityException
      */
     public function getProductImageUrl(ProductInterface $product): string
     {
@@ -121,14 +115,23 @@ class FeaturedProductData implements ArgumentInterface
     }
 
     /**
-     * Get the formatted price.
+     * Get the error message.
      *
-     * @param float|string $price
      * @return string
      */
-    public function getFormattedPrice(float|string $price): string
+    public function getErrorMessage(): string
     {
-        return $this->priceCurrency->format($price, false, 2);
+        return $this->errorMessage ?? '';
+    }
+
+    /**
+     * Set the error message.
+     *
+     * @param string $message
+     */
+    public function setErrorMessage(string $message): void
+    {
+        $this->errorMessage = $message;
     }
 
     /**

@@ -1,24 +1,27 @@
 <?php
 declare(strict_types=1);
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
 use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 
-/** @var FeaturedProductBlock $block */
 /** @var Escaper $escaper */
-/** @var FeaturedProductData $productData */
-$productData = $block->getData('featured_product_vm');
-$data = $productData->getFeaturedProduct();
+/** @var FeaturedProductBlock $block */
+/** @var FeaturedProductData $viewModel */
+$viewModel = $block->getData('featured_product_vm');
+$productData = $viewModel->getFeaturedProduct();
+
 ?>
-<?php if ($data && $data->getItems()): ?>
-    <?php foreach ($data->getItems() as $product): ?>
+<?php if ($productData): ?>
+    <?php /** @var Product $product */ ?>
+    <?php foreach ($productData->getItems() as $product): ?>
         <div class="product details product-item-details">
             <h2><?= $escaper->escapeHtml($product->getName()) ?></h2>
             <?= $escaper->escapeHtmlAttr(strip_tags($product->getDescription())) ?><br/><br/>
             <p>
-                <strong><?= $escaper->escapeHtml(__('Price:')) ?></strong>
-                <?= $escaper->escapeHtml($productData->getFormattedPrice($product->getPrice())) ?>
+                <strong><?= $escaper->escapeHtml(__('Price: ')) ?></strong>
+                <?= (string)$product->getFormattedPrice() ?>
             </p>
             <a href='<?= $escaper->escapeUrl($product->getProductUrl()) ?>'
                class='action primary'>

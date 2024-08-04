@@ -1,20 +1,23 @@
 <?php
 declare(strict_types=1);
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
 use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
 
-/** @var FeaturedProductBlock $block */
 /** @var Escaper $escaper */
-/** @var FeaturedProductData $productData */
-$productData = $block->getData('featured_product_vm');
-$data = $productData->getFeaturedProduct();
+/** @var FeaturedProductBlock $block */
+/** @var FeaturedProductData $viewModel */
+$viewModel = $block->getData('featured_product_vm');
+$productData = $viewModel->getFeaturedProduct();
+
 ?>
-<?php if ($data && $data->getItems()): ?>
-    <?php foreach ($data->getItems() as $product): ?>
+<?php if ($productData): ?>
+    <?php /** @var Product $product */ ?>
+    <?php foreach ($productData->getItems() as $product): ?>
         <img class="product base-image"
-             src="<?= $escaper->escapeUrl($productData->getProductImageUrl($product)) ?>"
+             src="<?= $escaper->escapeUrl($viewModel->getProductImageUrl($product)) ?>"
              loading="lazy"
              alt="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
              width="50%"

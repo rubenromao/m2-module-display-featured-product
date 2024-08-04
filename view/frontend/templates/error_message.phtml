@@ -1,0 +1,18 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock;
+use RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData;
+
+/** @var Escaper $escaper */
+/** @var FeaturedProductBlock $block */
+/** @var FeaturedProductData $viewModel */
+$viewModel = $block->getData('featured_product_vm');
+
+?>
+<?php if ($errorMessage = $viewModel->getErrorMessage()): ?>
+    <div class='message error'>
+        <?= $escaper->escapeHtml($errorMessage) ?>
+    </div>
+<?php endif; ?>

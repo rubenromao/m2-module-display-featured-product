@@ -32,6 +32,16 @@
                     </arguments>
                 </block>
             </container>
+            <!-- Error Message Block -->
+            <block class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock"
+                   name="error.message.block"
+                   template="RubenRomao_DisplayFeaturedProduct::error_message.phtml">
+                <arguments>
+                    <argument name="featured_product_vm" xsi:type="object">
+                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
