@@ -25,6 +25,7 @@ class FeaturedProductData implements ArgumentInterface
     public const string XML_PATH_FEATURED_PRODUCT_ENABLED = 'featured_products/homepage/enabled';
     public const string XML_PATH_FEATURED_PRODUCT_SKU = 'featured_products/homepage/featured_product_sku';
     public const string PRODUCT_PLACEHOLDER_IMAGE = 'placeholder/default/placeholder.jpg';
+    public const string ERROR_MESSAGE = 'We are currently experiencing issues. Please try again later.';
 
     /**
      * FeaturedProductData constructor.
@@ -61,10 +62,11 @@ class FeaturedProductData implements ArgumentInterface
 
         /**
          * Stop the execution if the featured product is not enabled,
-         *   or the SKU is not set and log the error and return null.
+         *   or the SKU is not set - log the error and return null.
          */
         if (!$featuredEnabled || !$featuredSku) {
             $this->logger->error('Featured product is not enabled or SKU is not set.');
+            $this->setErrorMessage(self::ERROR_MESSAGE);
             return null;
         }
 
@@ -79,7 +81,7 @@ class FeaturedProductData implements ArgumentInterface
         } catch (Exception $e) {
             /* If the search fails, log the error and display an error message. */
             $this->logger->critical('Error fetching the featured product: ' . $e->getMessage());
-            $this->setErrorMessage('We are currently experiencing issues. Please try again later.');
+            $this->setErrorMessage(self::ERROR_MESSAGE);
             return null;
         }
     }
