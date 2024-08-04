@@ -27,11 +27,6 @@ class FeaturedProductData implements ArgumentInterface
     public const string PRODUCT_PLACEHOLDER_IMAGE = 'placeholder/default/placeholder.jpg';
 
     /**
-     * @var string|null
-     */
-    private ?string $errorMessage;
-
-    /**
      * FeaturedProductData constructor.
      *
      * @param ProductRepositoryInterface $productRepository
@@ -40,6 +35,7 @@ class FeaturedProductData implements ArgumentInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
+     * @param string|null $errorMessage
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
@@ -48,6 +44,7 @@ class FeaturedProductData implements ArgumentInterface
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager,
         private readonly LoggerInterface $logger,
+        private ?string $errorMessage,
     ) {
     }
 
