@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="RubenRomao_DisplayFeaturedProduct::css/featured_product.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content" remove="true"/>
+        <referenceContainer name="columns" remove="false"/>
+        <referenceContainer name="main">
+<!--        <referenceContainer name="main">-->
+<!--            <block name="featured_product"-->
+<!--                   class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock"-->
+<!--                   template="RubenRomao_DisplayFeaturedProduct::featured_product.phtml">-->
+<!--                <arguments>-->
+<!--                    <argument name="featured_product_vm" xsi:type="object">-->
+<!--                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData-->
+<!--                    </argument>-->
+<!--                </arguments>-->
+<!--            </block>-->
+
+            <block class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock"
+                   name="homepage.display.featured.product.image"
+                   template="RubenRomao_DisplayFeaturedProduct::featured_product.phtml">
+                <arguments>
+                    <argument name="featured_product_vm" xsi:type="object">
+                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData
+                    </argument>
+                </arguments>
+            </block>
+<!--             Error Message Block -->
+            <block class="RubenRomao\DisplayFeaturedProduct\Block\FeaturedProductBlock"
+                   name="error.message.block"
+                   template="RubenRomao_DisplayFeaturedProduct::error_message.phtml">
+                <arguments>
+                    <argument name="featured_product_vm" xsi:type="object">
+                        RubenRomao\DisplayFeaturedProduct\ViewModel\FeaturedProductData
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

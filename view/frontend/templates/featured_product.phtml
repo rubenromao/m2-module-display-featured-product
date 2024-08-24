@@ -16,6 +16,15 @@ $productData = $viewModel->getFeaturedProduct();
 <?php if ($productData): ?>
     <?php /** @var Product $product */ ?>
     <?php foreach ($productData->getItems() as $product): ?>
+        <div class="product-image">
+            <img class='product base-image'
+                 src="<?= $escaper->escapeUrl($viewModel->getProductImageUrl($product)) ?>"
+                 loading='lazy'
+                 alt="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
+                 width='50%'
+                 height='50%'
+            />
+        </div>
         <div class="product details product-item-details">
             <h2><?= $escaper->escapeHtml($product->getName()) ?></h2>
             <?= $escaper->escapeHtmlAttr(strip_tags($product->getDescription())) ?><br/><br/>
@@ -25,7 +34,7 @@ $productData = $viewModel->getFeaturedProduct();
             </p>
             <a href='<?= $escaper->escapeUrl($product->getProductUrl()) ?>'
                class='action primary'>
-               <?= $escaper->escapeHtml(__("Go to the Product Page")) ?>
+                <?= $escaper->escapeHtml(__('Go to the Product Page')) ?>
             </a>
         </div>
     <?php endforeach; ?>
